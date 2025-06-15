@@ -41,7 +41,16 @@ class Recipientmain : ComponentActivity() {
         }
     }
 
+    private fun initializeStorageFirebase() {
+        val storageOptions = FirebaseOptions.Builder()
+            .setProjectId("socialmedia-b9148")
+            .setApplicationId("1:924036427672:android:75e24d5ebe6dd3f35cc5ed")
+            .setApiKey("AIzaSyBLVNr5M0sHOTtGpqBvn8ula-knHx0vxvc")
+            .setStorageBucket("socialmedia-b9148.appspot.com")
+            .build()
 
+        FirebaseApp.initializeApp(this, storageOptions, "storageApp")
+    }
 }
 
 @Composable
