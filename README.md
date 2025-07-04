@@ -6,24 +6,24 @@ This is a centralized organ donation and transplant management app built with **
 
 ## 🚀 Features
 
-- 🔐 **Firebase Authentication** (Email ogin)  
-- 🧠 **Machine Learning Integration** (Nearby donors finding,Review Classification)  
-- 📡 **Nearby Donors/Hospitals Finder** using dbscan algorithm  
+- 🔐 **Firebase Authentication** (Email login)  
+- 🧠 **Machine Learning Integration** (Nearby donors finding, Review Classification)  
+- 📡 **Nearby Donors/Hospitals Finder** using DBSCAN algorithm  
 - 🔄 **Request Sending & Acceptance** between donors, recipients, and hospitals  
 - 🧩 **MVVM Architecture** with Kotlin Coroutines  
 - 📱 **15+ UI Screens** built with Jetpack Compose  
 - 📦 **Centralized Platform** for all users (Donors, Recipients, Hospitals)  
 - 📲 **Notifications** for request updates and alerts  
-- 🌐 **Spring Boot API Integration** for ML-based processing   
+- 🌐 **Spring Boot API Integration** for ML-based processing  
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Frontend**: Kotlin, Jetpack Compose, MVVM, Coroutines 
-- **Backend**: Spring Boot (for ML models & custom APIs),Firebase Database 
-- **Machine Learning**: Text classification (review sentiment),dbscan  
-- **Others**: Firebase Authentication, Realtime Database 
+- **Frontend**: Kotlin, Jetpack Compose, MVVM, Coroutines  
+- **Backend**: Spring Boot (for ML models & custom APIs), Firebase Database  
+- **Machine Learning**: Text classification (review sentiment), DBSCAN  
+- **Others**: Firebase Authentication, Realtime Database  
 
 ---
 
@@ -65,5 +65,12 @@ This is a centralized organ donation and transplant management app built with **
 
 ---
 
-## 📂 Project Structure (MVVM)
+### 📋 Additional Screens
+
+| Display Page | Login/Signup | Request Sending |
+|--------------|--------------|-----------------|
+| <img src="https://github.com/abhinavreddy8/Organ-donation-and-Transportation-with-integraed-ML/blob/master/app/src/main/res/drawable/display.jpg?raw=true" width="250"/> | <img src="https://github.com/abhinavreddy8/Organ-donation-and-Transportation-with-integraed-ML/blob/master/app/src/main/res/drawable/signinup.jpg?raw=true" width="250"/> | <img src="https://github.com/abhinavreddy8/Organ-donation-and-Transportation-with-integraed-ML/blob/master/app/src/main/res/drawable/sendrequest.jpg?raw=true" width="250"/> |
+
+---
+
 
