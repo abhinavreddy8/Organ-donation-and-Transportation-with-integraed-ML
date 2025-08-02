@@ -47,13 +47,12 @@ class Donormain : ComponentActivity() {
 
         private fun initializeStorageFirebase() {
         val storageOptions = FirebaseOptions.Builder()
-            .setProjectId("socialmedia-b9148") // Replace with your Firebase Storage project's ID
-            .setApplicationId("1:924036427672:android:75e24d5ebe6dd3f35cc5ed") // Replace with your Firebase app's application ID
-            .setApiKey("AIzaSyBLVNr5M0sHOTtGpqBvn8ula-knHx0vxvc") // Replace with your Firebase app's API key
-            .setStorageBucket("socialmedia-b9148.appspot.com") // Replace with your Firebase Storage bucket URL
+            .setProjectId("socialmedia-b9148")
+            .setApplicationId("1:924036427672:android:75e24d5ebe6dd3f35cc5ed")
+            .setApiKey("AIzaSyBLVNr5M0sHOTtGpqBvn8ula-knHx0vxvc")
+            .setStorageBucket("socialmedia-b9148.appspot.com")
             .build()
 
-        // Initialize Firebase with these options, giving it a different name
         FirebaseApp.initializeApp(this, storageOptions, "storageApp")
     }
 }
@@ -63,12 +62,9 @@ fun DonorApp() {
     val navController = rememberNavController()
     val donorHomeViewModel: DonorHomeViewModel = viewModel()
 
-    // Get the storage app instance
     val storageApp = remember {
         FirebaseApp.getInstance("storageApp")
     }
-
-    // Initialize storage in the ViewModel
     LaunchedEffect(Unit) {
         donorHomeViewModel.initializeStorage(storageApp)
     }
@@ -145,7 +141,7 @@ fun DonorBottomNavigation(navController: NavHostController) {
                     Icon(
                         painter = painterResource(id = getIcon(screen.route)),
                         contentDescription = screen.route,
-                        modifier = Modifier.size(24.dp) // Reduced icon size
+                        modifier = Modifier.size(24.dp) 
                     )
                 },
                 selected = currentRoute == screen.route,
@@ -156,7 +152,7 @@ fun DonorBottomNavigation(navController: NavHostController) {
                         restoreState = true
                     }
                 },
-                alwaysShowLabel = false, // Hide labels
+                alwaysShowLabel = false,
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
