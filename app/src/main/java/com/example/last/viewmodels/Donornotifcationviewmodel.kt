@@ -31,7 +31,6 @@
         private val _error = MutableStateFlow<String?>(null)
         val error: StateFlow<String?> = _error
 
-        // Add status message for user feedback
         private val _statusMessage = MutableStateFlow<String?>(null)
         val statusMessage: StateFlow<String?> = _statusMessage
 
@@ -44,13 +43,11 @@
             val recipientName: String
         )
 
-        // Initialize real-time listener
         init {
             Log.d("DonorNotificationViewModel", "Initializing with real-time listener")
             setupRealTimeListener()
         }
 
-        // Manual fetch function (useful for initial load and retries)
         fun fetchContactRequests() {
             val currentUserId = auth.currentUser?.uid ?: run {
                 _error.value = "Please sign in to view contact requests"
@@ -76,7 +73,6 @@
                     for (requestSnapshot in snapshot.children) {
                         val id = requestSnapshot.key ?: continue
 
-                        // Don't use HashMap directly, we directly access the fields we need
                         Log.d("DonorNotificationViewModel", "Processing snapshot for $id")
 
                         val recipientId = requestSnapshot.child("recipientId").getValue(String::class.java) ?: continue
@@ -89,7 +85,6 @@
                         val recipientName = getRecipientName(recipientId)
                         Log.d("DonorNotificationViewModel", "Recipient name: $recipientName")
 
-                        // Include both pending and other status requests for visibility
                         requestList.add(
                             ContactRequest(
                                 id = id,
@@ -102,7 +97,6 @@
                         )
                     }
 
-                    // Sort by timestamp (newest first)
                     _requests.value = requestList.sortedByDescending { it.timestamp }
                     Log.d("DonorNotificationViewModel", "Total requests loaded: ${requestList.size}")
 
@@ -147,11 +141,9 @@
                             val status = requestSnapshot.child("status").getValue(String::class.java) ?: "pending"
                             val timestamp = requestSnapshot.child("timestamp").getValue(Long::class.java) ?: System.currentTimeMillis()
 
-                            // Get recipient name for each request
                             val recipientName = getRecipientName(recipientId)
                             Log.d("DonorNotificationViewModel", "Real-time update - Request: $id, Status: $status, Recipient: $recipientName")
 
-                            // Include all requests for visibility, not just pending ones
                             requestList.add(
                                 ContactRequest(
                                     id = id,
@@ -218,10 +210,8 @@
                         .setValue("accepted")
                         .await()
 
-                    // Update contact sharing permissions in database
                     updateContactSharingPermission(request.recipientId, request.donorId, true)
 
-                    // Send notification
                     sendAcceptanceNotification(request.recipientId)
 
                     _statusMessage.value = "Request accepted"
@@ -270,7 +260,7 @@
                 Log.d("DonorNotificationViewModel", "Contact sharing permission updated: donor=$donorId, recipient=$recipientId, granted=$granted")
             } catch (e: Exception) {
                 Log.e("DonorNotificationViewModel", "Failed to update sharing permissions: ${e.message}")
-                // Don't rethrow, treat as non-critical
+                
             }
         }
 
@@ -280,7 +270,6 @@
                 val currentUser = auth.currentUser
                 val donorName = currentUser?.displayName ?: "A donor"
 
-                // Get donor details for richer notification
                 val donorId = currentUser?.uid
                 val donorDetails = if (donorId != null) {
                     try {
@@ -305,16 +294,14 @@
                 Log.d("DonorNotificationViewModel", "Acceptance notification sent to: $recipientId")
             } catch (e: Exception) {
                 Log.e("DonorNotificationViewModel", "Failed to send notification: ${e.message}")
-                // Don't rethrow, treat as non-critical
+                
             }
         }
 
-        // Clear error message
         fun clearError() {
             _error.value = null
         }
 
-        // Clear status message
         fun clearStatusMessage() {
             _statusMessage.value = null
         }
