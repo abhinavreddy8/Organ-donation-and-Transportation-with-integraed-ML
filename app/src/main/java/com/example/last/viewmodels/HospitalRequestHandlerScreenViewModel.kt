@@ -28,8 +28,6 @@ class HospitalRequestHandlerViewModel : ViewModel() {
         isLoading = true
         error = null
 
-        // Assuming the hospital ID is stored in the user's custom claims or in a separate node
-        // For simplicity, we'll use the UID directly here
         val hospitalId = currentUser.uid
 
         database.child("hospital_requests").child(hospitalId)
@@ -56,7 +54,6 @@ class HospitalRequestHandlerViewModel : ViewModel() {
                         )
                     }
 
-                    // Sort by timestamp (newest first)
                     requestsList.sortByDescending { it.timestamp }
 
                     _requests.value = requestsList
@@ -74,7 +71,6 @@ class HospitalRequestHandlerViewModel : ViewModel() {
         val currentUser = auth.currentUser ?: return
         val hospitalId = currentUser.uid
 
-        // Get the request details first
         database.child("hospital_requests").child(hospitalId).child(requestId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -83,7 +79,6 @@ class HospitalRequestHandlerViewModel : ViewModel() {
                         val hospitalName = snapshot.child("hospitalName").getValue(String::class.java) ?: ""
                         val requestDescription = snapshot.child("description").getValue(String::class.java) ?: ""
 
-                        // Update the request status in hospital_requests
                         val updatedValues = mapOf(
                             "status" to status,
                             "response" to response
@@ -92,11 +87,9 @@ class HospitalRequestHandlerViewModel : ViewModel() {
                         database.child("hospital_requests").child(hospitalId).child(requestId)
                             .updateChildren(updatedValues)
 
-                        // Update the request status in recipient_requests
                         database.child("recipient_requests").child(recipientId).child(requestId)
                             .updateChildren(updatedValues)
 
-                        // Create notification for the recipient
                         val notificationId = database.child("recipient_notifications").child(recipientId).push().key ?: return
 
                         val notification = mapOf(
