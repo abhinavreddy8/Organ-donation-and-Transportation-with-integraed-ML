@@ -38,10 +38,8 @@ fun DonorNotificationScreen(
     val error by viewModel.error.collectAsState()
     val statusMessage by viewModel.statusMessage.collectAsState()
 
-    // Track if any notifications are shown
     val hasNotifications = requests.isNotEmpty()
 
-    // Auto-dismiss status messages after a delay
     LaunchedEffect(statusMessage) {
         if (statusMessage != null) {
             delay(3000)
@@ -49,7 +47,6 @@ fun DonorNotificationScreen(
         }
     }
 
-    // Trigger fetch when screen starts
     LaunchedEffect(Unit) {
         Log.d("DonorNotificationScreen", "Screen started, triggering fetchContactRequests")
         viewModel.fetchContactRequests()
@@ -128,7 +125,6 @@ fun DonorNotificationScreen(
                 }
             }
 
-            // Status message snackbar
             AnimatedVisibility(
                 visible = statusMessage != null,
                 enter = fadeIn(),
