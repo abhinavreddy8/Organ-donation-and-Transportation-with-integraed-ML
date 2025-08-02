@@ -50,7 +50,6 @@ fun HospitalDetailScreen(
         viewModel.fetchHospitalDetails(hospitalId)
     }
 
-    // Classify reviews when available
     LaunchedEffect(viewModel.reviews) {
         if (viewModel.reviews.isNotEmpty()) {
             viewModel.classifyReviews()
@@ -366,7 +365,7 @@ fun HospitalDetailScreen(
 
                                         repeat(fullStars) {
                                             Icon(
-                                                painter = painterResource(id = R.drawable.hospital), // Replace with star icon
+                                                painter = painterResource(id = R.drawable.hospital),
                                                 contentDescription = "Star",
                                                 tint = MaterialTheme.colorScheme.primary,
                                                 modifier = Modifier.size(24.dp)
@@ -376,7 +375,7 @@ fun HospitalDetailScreen(
 
                                         if (hasHalfStar) {
                                             Icon(
-                                                painter = painterResource(id = R.drawable.hospital), // Replace with half star icon
+                                                painter = painterResource(id = R.drawable.hospital),
                                                 contentDescription = "Half Star",
                                                 tint = MaterialTheme.colorScheme.primary,
                                                 modifier = Modifier.size(24.dp)
@@ -386,7 +385,7 @@ fun HospitalDetailScreen(
 
                                         repeat(5 - fullStars - (if (hasHalfStar) 1 else 0)) {
                                             Icon(
-                                                painter = painterResource(id = R.drawable.hospital), // Replace with empty star icon
+                                                painter = painterResource(id = R.drawable.hospital),
                                                 contentDescription = "Empty Star",
                                                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                                                 modifier = Modifier.size(24.dp)
@@ -534,7 +533,7 @@ fun ReviewItem(
 
             repeat(fullStars) {
                 Icon(
-                    painter = painterResource(id = R.drawable.hospital), // Replace with star icon
+                    painter = painterResource(id = R.drawable.hospital), 
                     contentDescription = "Star",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(16.dp)
@@ -544,7 +543,7 @@ fun ReviewItem(
 
             if (hasHalfStar) {
                 Icon(
-                    painter = painterResource(id = R.drawable.hospital), // Replace with half star icon
+                    painter = painterResource(id = R.drawable.hospital), 
                     contentDescription = "Half Star",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(16.dp)
@@ -554,7 +553,7 @@ fun ReviewItem(
 
             repeat(5 - fullStars - (if (hasHalfStar) 1 else 0)) {
                 Icon(
-                    painter = painterResource(id = R.drawable.hospital), // Replace with empty star icon
+                    painter = painterResource(id = R.drawable.hospital), 
                     contentDescription = "Empty Star",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier.size(16.dp)
