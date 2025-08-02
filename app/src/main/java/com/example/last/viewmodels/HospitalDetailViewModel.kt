@@ -30,13 +30,11 @@ class HospitalDetailViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance().reference
     private val auth = FirebaseAuth.getInstance()
 
-    // Vocabulary map for sentiment analysis
     private var vocabularyMap: Map<String, Int> = emptyMap()
     private val maxSequenceLength = 100
-    private val maxWords = 5000 // Match training vocabulary size
+    private val maxWords = 5000 
     private val stopWords: Set<String> by lazy { loadStopWords() }
 
-    // Compile regex pattern once
     private val nonAlphaPattern = Pattern.compile("[^a-zA-Z\\s]")
 
     fun fetchHospitalDetails(hospitalId: String) {
@@ -56,7 +54,6 @@ class HospitalDetailViewModel : ViewModel() {
                     hospital = HospitalData(id, name, address, contact, imageUrl, specialties)
                     isLoading = false
 
-                    // Fetch reviews after hospital details are loaded
                     fetchHospitalReviews(id)
                 } else {
                     error = "Hospital not found"
@@ -86,10 +83,8 @@ class HospitalDetailViewModel : ViewModel() {
             "timestamp" to System.currentTimeMillis()
         )
 
-        // Save in hospital's requests node
         database.child("hospital_requests").child(hospital?.id ?: "").child(requestId).setValue(request)
 
-        // Save in recipient's requests node for tracking
         database.child("recipient_requests").child(currentUser.uid).child(requestId).setValue(request)
     }
 
@@ -107,7 +102,7 @@ class HospitalDetailViewModel : ViewModel() {
 
         database.child("hospital_reviews").child(hospital?.id ?: "").child(reviewId).setValue(review)
             .addOnSuccessListener {
-                // Refresh reviews
+                
                 fetchHospitalReviews(hospital?.id ?: "")
             }
     }
@@ -115,25 +110,24 @@ class HospitalDetailViewModel : ViewModel() {
     fun deleteReview(reviewId: String) {
         val currentUser = auth.currentUser ?: return
 
-        // Check if the review belongs to the current user
         database.child("hospital_reviews").child(hospital?.id ?: "").child(reviewId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userId = snapshot.child("userId").getValue(String::class.java)
 
                     if (userId == currentUser.uid) {
-                        // Delete the review
+                        
                         database.child("hospital_reviews").child(hospital?.id ?: "").child(reviewId)
                             .removeValue()
                             .addOnSuccessListener {
-                                // Refresh reviews
+                               
                                 fetchHospitalReviews(hospital?.id ?: "")
                             }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle error
+                   
                 }
             })
     }
@@ -178,12 +172,9 @@ class HospitalDetailViewModel : ViewModel() {
         val negativeList = mutableListOf<ReviewData>()
 
         for (review in reviews) {
-            // Classify based on rating (assuming 1-5 scale)
             when {
-                review.rating >= 3 -> positiveList.add(review) // 4-5 stars are positive
-                review.rating < 3 -> negativeList.add(review)  // 1-2 stars are negative
-                // 3 stars could be considered neutral and excluded or added to negative
-                // Here I'm adding them to negative for your use case
+                review.rating >= 3 -> positiveList.add(review) 
+                review.rating < 3 -> negativeList.add(review) 
                 else -> negativeList.add(review)
             }
         }
@@ -201,7 +192,6 @@ class HospitalDetailViewModel : ViewModel() {
                     while (reader.readLine().also { line = it } != null) {
                         line?.trim()?.let { word ->
                             if (word.isNotEmpty()) {
-                                // Assign index based on tokenizer.word_index (1-based indexing)
                                 val index = vocabMap.size + 1
                                 vocabMap[word] = index
                             }
@@ -212,7 +202,6 @@ class HospitalDetailViewModel : ViewModel() {
             vocabularyMap = vocabMap
         } catch (e: Exception) {
             e.printStackTrace()
-            // Fallback vocabulary (minimal to avoid crashes)
             vocabularyMap = mapOf(
                 "good" to 1, "bad" to 2, "great" to 3, "terrible" to 4,
                 "excellent" to 5, "poor" to 6, "amazing" to 7, "awful" to 8
@@ -221,7 +210,6 @@ class HospitalDetailViewModel : ViewModel() {
     }
 
     private fun loadStopWords(): Set<String> {
-        // Load a basic set of stopwords (since NLTK isn't available in Android)
         return setOf(
             "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has",
             "he", "in", "is", "it", "its", "of", "on", "that", "the", "to", "was",
