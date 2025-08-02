@@ -68,7 +68,6 @@ class RecipientHomeViewModel : ViewModel() {
     private val _uploadProgress = MutableStateFlow<Double>(0.0)
     val uploadProgress: StateFlow<Double> = _uploadProgress.asStateFlow()
 
-    // Maintain current recipient data for editing
     private var currentRecipientData = RecipientData()
 
     fun initializeStorage(storageApp: FirebaseApp) {
@@ -87,7 +86,6 @@ class RecipientHomeViewModel : ViewModel() {
                 }
                 currentRecipientData = data
                 _recipientData.value = data
-                // Fetch profile image after getting recipient data
                 fetchProfileImage()
             } catch (e: Exception) {
                 _toastMessage.value = "Failed to load data: ${e.message}"
