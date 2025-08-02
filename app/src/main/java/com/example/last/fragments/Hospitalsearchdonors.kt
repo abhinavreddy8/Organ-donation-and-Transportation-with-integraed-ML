@@ -35,7 +35,6 @@ fun HospitalSearchScreen(
     var searchQuery by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Permission launcher for location
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -45,16 +44,12 @@ fun HospitalSearchScreen(
             viewModel.showToast("Location permission denied")
         }
     }
-
-    // Observe toast messages
     viewModel.toastMessage?.let { message ->
         LaunchedEffect(message) {
             snackbarHostState.showSnackbar(message)
             viewModel.toastMessage = null
         }
     }
-
-    // Initialize context when screen first loads
     LaunchedEffect(Unit) {
         viewModel.setContext(context)
     }
