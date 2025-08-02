@@ -65,7 +65,6 @@ class HospitalRequestViewModel : ViewModel() {
                         )
                     }
 
-                    // Sort by timestamp (newest first)
                     requestsList.sortByDescending { it.timestamp }
 
                     _requests.value = requestsList
@@ -79,26 +78,18 @@ class HospitalRequestViewModel : ViewModel() {
             })
     }
 
-    /**
-     * Updates the status of a request and sends a notification to the recipient
-     * @param requestId ID of the request to update
-     * @param newStatus New status ("accepted" or "rejected")
-     * @param responseMessage Optional response message to the recipient
-     */
+    
     fun updateRequestStatus(requestId: String, newStatus: String, responseMessage: String) {
         val currentUser = auth.currentUser ?: return
 
-        // Find the request in the current list
         val request = _requests.value.find { it.requestId == requestId } ?: return
 
-        // Update the request status in the database
         val requestUpdates = HashMap<String, Any>()
         requestUpdates["status"] = newStatus
         requestUpdates["response"] = responseMessage
 
         Log.d("HospitalRequestViewModel", "Updating request $requestId to status: $newStatus")
 
-        // Update in recipient's database
         database.child("recipient_requests")
             .child(request.recipientId)
             .child(requestId)
@@ -111,19 +102,15 @@ class HospitalRequestViewModel : ViewModel() {
                 error = "Failed to update request status: ${e.message}"
             }
 
-        // Also update in hospital's database if needed
         database.child("hospital_requests")
             .child(currentUser.uid)
             .child(requestId)
             .updateChildren(requestUpdates)
 
-        // Create and send notification to the recipient
         createRecipientNotification(request, newStatus, responseMessage)
     }
 
-    /**
-     * Creates a notification for the recipient about their request status
-     */
+    
     private fun createRecipientNotification(request: RequestData, status: String, responseMessage: String) {
         val currentUser = auth.currentUser ?: return
         val notificationId = database.child("recipient_notifications").push().key ?: return
