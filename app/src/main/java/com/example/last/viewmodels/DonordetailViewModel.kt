@@ -38,11 +38,9 @@ class DonorDetailViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    // Add status message for user feedback (similar to DonorNotificationViewModel)
     private val _statusMessage = MutableStateFlow<String?>(null)
     val statusMessage: StateFlow<String?> = _statusMessage
 
-    // Add contact request status to track if a request is already sent
     private val _contactRequestStatus = MutableStateFlow<String?>(null)
     val contactRequestStatus: StateFlow<String?> = _contactRequestStatus
 
@@ -79,7 +77,7 @@ class DonorDetailViewModel : ViewModel() {
 
             try {
                 Log.d(TAG, "Fetching donor details for ID: $donorId")
-                // Get donor data
+                
                 val snapshot = getDonorData(donorId)
 
                 if (snapshot.exists()) {
@@ -110,10 +108,8 @@ class DonorDetailViewModel : ViewModel() {
                     )
                     Log.d(TAG, "Donor details fetched: ${_donorDetails.value}")
 
-                    // Fetch additional image URLs if needed
                     fetchAdditionalImages(donorId)
 
-                    // Check if there's already a contact request
                     checkExistingContactRequest(donorId)
                 } else {
                     _error.value = "Donor not found"
@@ -175,7 +171,7 @@ class DonorDetailViewModel : ViewModel() {
     private suspend fun fetchAdditionalImages(donorId: String) {
         try {
             Log.d(TAG, "Fetching additional images for donor: $donorId")
-            // Fetch medical report URL
+           
             val medicalReportRef = storageReference
                 .child("donors")
                 .child(donorId)
@@ -188,7 +184,6 @@ class DonorDetailViewModel : ViewModel() {
                 null
             }
 
-            // Fetch surgery report URL
             val surgeryReportRef = storageReference
                 .child("donors")
                 .child(donorId)
@@ -201,13 +196,11 @@ class DonorDetailViewModel : ViewModel() {
                 null
             }
 
-            // Update donor details with image URLs
             _donorDetails.value = _donorDetails.value?.copy(
                 medicalReportUrl = medicalReportUrl,
                 surgeryReportUrl = surgeryReportUrl
             )
         } catch (e: Exception) {
-            // Silently fail for additional images
             Log.w(TAG, "Error fetching additional images: ${e.message}")
         }
     }
@@ -240,7 +233,6 @@ class DonorDetailViewModel : ViewModel() {
                 }
             }
 
-            // Check if there's an existing request for this donor
             var existingStatus: String? = null
 
             for (requestSnapshot in snapshot.children) {
@@ -256,7 +248,7 @@ class DonorDetailViewModel : ViewModel() {
 
         } catch (e: Exception) {
             Log.e(TAG, "Error checking existing contact requests: ${e.message}")
-            // Don't update status on error - keep as null
+            
         }
     }
 
@@ -278,11 +270,9 @@ class DonorDetailViewModel : ViewModel() {
 
                 contactRequestRef.setValue(contactRequest).await()
 
-                // Update local state
                 _contactRequestStatus.value = "pending"
                 _statusMessage.value = "Contact request sent successfully"
 
-                // Send a notification to the donor
                 sendNotificationToDonor(donorId, currentUserId)
 
             } catch (e: Exception) {
@@ -317,7 +307,6 @@ class DonorDetailViewModel : ViewModel() {
             notificationsRef.setValue(notification).await()
             Log.d(TAG, "Notification sent successfully to donor: $donorId")
         } catch (e: Exception) {
-            // Silently fail notification sending
             Log.e(TAG, "Failed to send notification: ${e.message}", e)
         }
     }
@@ -326,12 +315,10 @@ class DonorDetailViewModel : ViewModel() {
         return auth.currentUser?.uid
     }
 
-    // Clear error message
     fun clearError() {
         _error.value = null
     }
 
-    // Clear status message
     fun clearStatusMessage() {
         _statusMessage.value = null
     }
