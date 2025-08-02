@@ -42,7 +42,6 @@ class RecipientNotificationsViewModel : ViewModel() {
 
         Log.d("RecipientNotificationsVM", "Fetching notifications for user: ${currentUser.uid}")
 
-        // Fetching hospital notifications
         database.child("recipient_notifications").child(currentUser.uid)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -70,7 +69,6 @@ class RecipientNotificationsViewModel : ViewModel() {
                         Log.d("RecipientNotificationsVM", "Found hospital notification: $notificationId from $hospitalName")
                     }
 
-                    // Fetching donor requests
                     fetchDonorRequests(currentUser.uid, notificationList)
                 }
 
@@ -83,7 +81,7 @@ class RecipientNotificationsViewModel : ViewModel() {
     }
 
     private fun fetchDonorRequests(userId: String, notificationList: MutableList<NotificationData>) {
-        // Fetching donor requests
+       
         database.child("contactRequests").child(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -108,7 +106,6 @@ class RecipientNotificationsViewModel : ViewModel() {
                         Log.d("RecipientNotificationsVM", "Found donor request notification: $notificationId")
                     }
 
-                    // Sort by timestamp (newest first)
                     notificationList.sortByDescending { it.timestamp }
                     _notifications.value = notificationList
                     isLoading = false
