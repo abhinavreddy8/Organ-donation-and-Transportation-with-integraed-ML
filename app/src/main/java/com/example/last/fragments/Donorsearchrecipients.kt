@@ -48,7 +48,6 @@ fun DonorSearchScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Search bar
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -63,7 +62,6 @@ fun DonorSearchScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Recipients list
         if (viewModel.isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -133,7 +131,6 @@ fun RecipientCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Recipient image
             val painter = if (recipient.imageUrl.isNotEmpty()) {
                 rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current)
@@ -203,8 +200,6 @@ fun RecipientCard(
     }
 }
 
-
-// Add this function to use the ViewModel and UI in your navigation
 @Composable
 fun DonorSearchRecipientScreen(navController: NavController) {
     val viewModel: Donorsearchviewmodel = viewModel()
